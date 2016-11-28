@@ -1,0 +1,89 @@
+{
+  "variables": {
+    "name": "azure_windows_consul",
+    "atlas_username":    "{{env `ATLAS_USERNAME`}}",
+    "client_id": "",
+    "cllient_secret": "",
+    "resource_group_name": "",
+    "storage_account": "",
+    "subscription_id": "",
+    "tenant_id": "",
+    "os_type": "",
+    "image_publisher": "",
+    "image_offer": "",
+    "image_sku": "",
+    "location": "",
+    "vm_size": "",
+    "scripts_dir":       "packer/scripts/windows",
+    "consul_config_dir": "C:\\etc\\consul.d"
+  },
+  "push": {
+    "name": "{{user `atlas_username`}}/{{user `name`}}",
+    "base_dir": "../../../.",
+    "include": [
+      "{{user `user_data_file`}}",
+      "{{user `scripts_dir`}}/*"
+    ],
+    "vcs": false
+  },
+  "builders": [
+    {
+      "type": "azure-arm",
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "resource_group_name": "{{user `resource_group_name`}}",
+      "storage_account": "{{user `storage_account`}}",
+      "subscription_id": "{{user `subscription_id`}}",
+      "tenant_id": "{{user `tenant_id`}}",
+      "capture_container_name": "images",
+      "capture_name_prefix": "packer",
+      "os_type": "{{user `os_type`}}",
+      "image_publisher": "{{user `image_publisher`}}",
+      "image_offer": "{{user `image_offer`}}",
+      "image_sku": "{{user `image_sku`}}",
+      "location": "{{user `location`}}",
+      "vm_size": "{{user `vm_size`}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts":  ["{{user `scripts_dir`}}/install_windows_updates.ps1"]
+    },
+    {
+      "type": "windows-restart",
+      "restart_command": "powershell \"& {(Get-WmiObject win32_operatingsystem).LastBootUpTime > C:\\ProgramData\\lastboot.txt; Restart-Computer -force}\"",
+      "restart_check_command": "powershell -command \"& {if ((get-content C:\\ProgramData\\lastboot.txt) -eq (Get-WmiObject win32_operatingsystem).LastBootUpTime) {Write-Output 'Waiting for restart'; start-sleep 600} else {Write-Output 'Restart complete'}}\"",
+      "restart_timeout": "60m"
+    },
+    {
+      "type": "powershell",
+      "scripts":  ["{{user `scripts_dir`}}/install_windows_updates.ps1"]
+    },
+    {
+      "type": "windows-restart",
+      "restart_command": "powershell \"& {(Get-WmiObject win32_operatingsystem).LastBootUpTime > C:\\ProgramData\\lastboot.txt; Restart-Computer -force}\"",
+      "restart_check_command": "powershell -command \"& {if ((get-content C:\\ProgramData\\lastboot.txt) -eq (Get-WmiObject win32_operatingsystem).LastBootUpTime) {Write-Output 'Waiting for restart'; start-sleep 600} else {Write-Output 'Restart complete'}}\"",
+      "restart_timeout": "60m"
+    },
+    {
+      "type": "powershell",
+      "scripts":  ["{{user `scripts_dir`}}/set_ec2_launch.ps1"]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "New-Item -Path {{user `consul_config_dir`}} -ItemType Directory -Force"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "{{user `scripts_dir`}}/consul_server.json",
+      "destination": "{{user `consul_config_dir`}}\\config.json"
+    },
+    {
+      "type": "powershell",
+      "scripts": ["{{user `scripts_dir`}}/install_consul.ps1"]
+    }
+  ]
+}
