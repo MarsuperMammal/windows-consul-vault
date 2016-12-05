@@ -12,7 +12,7 @@
     "winrm_username":    "Administrator",
     "user_data_file":    "packer/scripts/windows/config/ec2_user_data.conf",
     "scripts_dir":       "packer/scripts/windows",
-    "config_dir":        "packer/config/vault",
+    "config_dir":        "packer/config",
     "consul_config_dir": "C:\\etc\\consul.d",
     "vault_config_dir":  "C:\\etc\\vault.d",
     "vault_data_dir":    "C:\\ops\\scripts"
@@ -76,17 +76,17 @@
     },
     {
       "type": "file",
-      "source": "{{user `scripts_dir`}}/consul_client.json",
+      "source": "{{user `config_dir`}}/consul/consul_client.json",
       "destination": "{{user `consul_config_dir`}}\\config.json"
     },
     {
       "type": "file",
-      "source": "{{user `config_dir`}}/vault.hcl",
+      "source": "{{user `config_dir`}}/vault/vault.hcl",
       "destination": "{{user `vault_config_dir`}}\\vault.hcl"
     },
     {
       "type": "file",
-      "source": "{{user `config_dir`}}/.",
+      "source": "{{user `config_dir`}}/vault/.",
       "destination": "{{user `vault_data_dir`}}"
     },
     {

@@ -12,6 +12,7 @@
     "winrm_username":    "Administrator",
     "user_data_file":    "packer/scripts/windows/config/ec2_user_data.conf",
     "scripts_dir":       "packer/scripts/windows",
+    "config_dir":        "packer/config",
     "consul_config_dir": "C:\\etc\\consul.d"
   },
   "builders": [
@@ -62,7 +63,7 @@
     },
     {
       "type": "file",
-      "source": "{{user `scripts_dir`}}/consul_server.json",
+      "source": "{{user `config_dir`}}/consul/consul_server.json",
       "destination": "{{user `consul_config_dir`}}\\config.json"
     },
     {
