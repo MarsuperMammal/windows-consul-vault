@@ -4,7 +4,7 @@ foreach ($dir in @('log', 'data')) {
 }
 
 write-output "Setting urls"
-$ctmpl = "consul-template_0.18.0-rc1_windows_amd64.zip"
+$ctmplUrl = "https://releases.hashicorp.com/consul-template/0.18.0-rc1/consul-template_0.18.0-rc1_windows_amd64.zip"
 
 write-output "Setting file paths"
 $ctmplFilePath = "$($env:TEMP)\ctmpl.zip"
