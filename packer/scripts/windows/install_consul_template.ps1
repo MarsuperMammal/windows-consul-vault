@@ -35,7 +35,7 @@ Remove-Item -Force -Path $ctmplFilePath
 
 # Create the ctmpl service and set its options
 write-output "Creating ctmpl service"
-C:\opt\nssm.exe install ctmpl "C:\opt\ctmpl\ctmpl.exe" agent -config-dir "C:\etc\ctmpl.d"
+C:\opt\nssm.exe install ctmpl "C:\opt\ctmpl\ctmpl.exe" -config "C:\etc\ctmpl.d"
 write-output "Setting ctmpl options"
 C:\opt\nssm.exe set ctmpl AppEnvironmentExtra "GOMAXPROCS=%NUMBER_OF_PROCESSORS%"
 C:\opt\nssm.exe set ctmpl AppRotateFiles 1
