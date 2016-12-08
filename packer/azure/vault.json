@@ -14,18 +14,10 @@
     "image_sku": "",
     "location": "",
     "vm_size": "",
-    "scripts_dir":       "packer/scripts/windows",
+    "scripts_dir": "packer/scripts/windows",
+    "config_dir": "packer/config",
     "consul_config_dir": "C:\\etc\\consul.d",
     "vault_config_dir": "C:\\etc\\vault.d"
-  },
-  "push": {
-    "name": "{{user `atlas_username`}}/{{user `name`}}",
-    "base_dir": "../../../.",
-    "include": [
-      "{{user `user_data_file`}}",
-      "{{user `scripts_dir`}}/*"
-    ],
-    "vcs": false
   },
   "builders": [
     {
@@ -61,18 +53,6 @@
     },
     {
       "type": "powershell",
-      "scripts": [
-        "{{user `scripts_dir`}}/install_windows_updates.ps1"
-      ]
-    },
-    {
-      "type": "windows-restart",
-      "restart_command": "powershell \"& {(Get-WmiObject win32_operatingsystem).LastBootUpTime > C:\\ProgramData\\lastboot.txt; Restart-Computer -force}\"",
-      "restart_check_command": "powershell -command \"& {if ((get-content C:\\ProgramData\\lastboot.txt) -eq (Get-WmiObject win32_operatingsystem).LastBootUpTime) {Write-Output 'Waiting for restart'; start-sleep 600} else {Write-Output 'Restart complete'}}\"",
-      "restart_timeout": "60m"
-    },
-    {
-      "type": "powershell",
       "inline": [
         "New-Item -Path {{user `consul_config_dir`}} -ItemType Directory -Force",
         "New-Item -Path {{user `vault_config_dir`}} -ItemType Directory -Force"
@@ -80,12 +60,12 @@
     },
     {
       "type": "file",
-      "source": "{{user `scripts_dir`}}/consul_client.json",
+      "source": "{{user `config_dir`}}/consul/consul_client.json",
       "destination": "{{user `consul_config_dir`}}\\config.json"
     },
     {
       "type": "file",
-      "source": "{{user `config_dir`}}/vault.hcl",
+      "source": "{{user `config_dir`}}/vault/vault.hcl",
       "destination": "{{user `vault_config_dir`}}\\vault.hcl"
     },
     {
@@ -94,16 +74,6 @@
         "{{user `scripts_dir`}}/install_consul.ps1",
         "{{user `scripts_dir`}}/install_vault.ps1"
       ]
-    }
-  ],
-  "post-processors": [
-    {
-      "type": "atlas",
-      "artifact": "{{user `atlas_username`}}/{{user `name`}}",
-      "artifact_type": "amazon.ami",
-      "metadata": {
-        "created_at": "{{timestamp}}"
-      }
     }
   ]
 }

@@ -29,4 +29,7 @@ write-output "Configuring Vault.."
 C:\opt\nssm.exe restart consul
 C:\opt\nssm.exe restart vault
 
+(Get-Content C:\opt\vault\scripts\setup_vault.ps1 | ForEach-Object { $_ -replace "{{ vault_fqdn }}", \"${vault_fqdn}\" } ) | Set-Content C:\opt\vault\scripts\setup_vault.ps1
+(Get-Content C:\opt\vault\scripts\setup_vault.ps1 | ForEach-Object { $_ -replace "{{ consul_fqdn }}", \"${consul_fqdn}\" } ) | Set-Content C:\opt\vault\scripts\setup_vault.ps1
+
 C:\opt\vault\scripts\setup_vault.ps1
