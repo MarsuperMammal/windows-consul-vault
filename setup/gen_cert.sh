@@ -77,10 +77,6 @@ cp openssl.cnf ${SITESSLCONF}
 [ alt_names ]
 DNS.1 = ${DOMAIN}
 DNS.2 = vault.${DOMAIN}
-DNS.3 = vpn.${DOMAIN}
-DNS.4 = nodejs.${DOMAIN}
-DNS.5 = haproxy.${DOMAIN}
-DNS.6 = private.haproxy.${DOMAIN}
 EOF
 ) >> $SITESSLCONF
 

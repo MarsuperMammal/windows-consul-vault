@@ -26,4 +26,7 @@ write-output "Configuring Vault.."
 (Get-Content C:\etc\vault.d\vault.hcl | ForEach-Object { $_ -replace "{{ tls_cert_file }}", "C:\\opt\\vault\\data\\vault.crt" } ) | Set-Content C:\etc\vault.d\vault.hcl
 (Get-Content C:\etc\vault.d\vault.hcl | ForEach-Object { $_ -replace "{{ tls_key_file }}", "C:\\opt\\vault\\data\\vault.key" } ) | Set-Content C:\etc\vault.d\vault.hcl
 
+C:\opt\nssm.exe restart consul
+C:\opt\nssm.exe restart vault
+
 C:\opt\vault\scripts\setup_vault.ps1
