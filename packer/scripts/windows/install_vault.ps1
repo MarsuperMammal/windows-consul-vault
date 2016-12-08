@@ -36,7 +36,7 @@ Remove-Item -Force -Path $vaultFilePath
 
 # Create the Vault service and set its options
 write-output "Creating Vault service"
-C:\opt\nssm.exe install vault "C:\opt\vault\vault.exe" agent -config-dir "C:\etc\vault.d"
+C:\opt\nssm.exe install vault "C:\opt\vault\vault.exe" server -config "C:\etc\vault.d"
 write-output "Setting Vault options"
 C:\opt\nssm.exe set vault AppEnvironmentExtra "GOMAXPROCS=%NUMBER_OF_PROCESSORS%"
 C:\opt\nssm.exe set vault AppRotateFiles 1

@@ -1,3 +1,0 @@
-prefix {
-  path = "service/nodejs"
-}

@@ -19,10 +19,6 @@ This will generate a self-signed site cert with the following subjectAltNames in
 
  * DOMAIN
  * vault.DOMAIN
- * vpn.DOMAIN
- * nodejs.DOMAIN
- * haproxy.DOMAIN
- * private.haproxy.DOMAIN
 
 And a self-signed cert for Consul/Vault with the following subjectAltNames in the directory specified.
 
@@ -31,7 +27,6 @@ And a self-signed cert for Consul/Vault with the following subjectAltNames in th
  * *.service.consul
 
  * IP
- * 0.0.0.0
  * 127.0.0.1
 EOF
 
@@ -112,8 +107,8 @@ VAULTSSLCONF=${BUILDDIR}/vault_selfsigned_openssl.cnf
  cp openssl.cnf ${VAULTSSLCONF}
  (cat <<EOF
 [ alt_names ]
-DNS.1 = *.node.${DOMAIN}
-DNS.2 = *.service.${DOMAIN}
+DNS.1 = *.node.consul
+DNS.2 = *.service.consul
 IP.1 = 0.0.0.0
 IP.2 = 127.0.0.1
 EOF

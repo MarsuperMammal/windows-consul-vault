@@ -8,8 +8,8 @@ New-Item -Path "C:\opt\nssm" -ItemType Directory -Force
 
 write-output "Setting urls"
 $nssmUrl = "http://nssm.cc/release/nssm-2.24.zip"
-$consulUrl = "https://releases.hashicorp.com/consul/0.6.0-rc1/consul_0.6.0-rc1_windows_amd64.zip"
-$uiUrl = "https://releases.hashicorp.com/consul/0.6.0-rc1/consul_0.6.0-rc1_web_ui.zip"
+$consulUrl = "https://releases.hashicorp.com/consul/0.7.1/consul_0.7.1_windows_amd64.zip"
+$uiUrl = "https://releases.hashicorp.com/consul/0.7.1/consul_0.7.1_web_ui.zip"
 
 write-output "Setting file paths"
 $nssmFilePath = "$($env:TEMP)\nssm.zip"
@@ -55,7 +55,8 @@ $uiDestination.CopyHere($uiZip.Items(), $copyFlags)
 write-output "Moving nssm"
 Move-Item -Path "C:\opt\nssm\nssm-2.24\win32\nssm.exe" "C:\opt" -Force
 write-output "Moving Consul Web UI"
-Move-Item -Path "C:\opt\consul\dist" "C:\opt\consul\ui" -Force
+Move-Item -Path "C:\opt\consul\static\" "C:\opt\consul\ui\static\" -Force
+Move-Item -Path "C:\opt\consul\index.html" "C:\opt\consul\ui\index.html" -Force
 
 # Clean up
 write-output "Cleanup"

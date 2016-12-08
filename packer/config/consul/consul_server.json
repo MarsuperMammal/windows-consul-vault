@@ -12,7 +12,7 @@
   "bind_addr": "0.0.0.0",
   "node_name": "{{ node_name }}",
   "skip_leave_on_interrupt": true,
-  "leave_on_terminate": true
+  "leave_on_terminate": true,
   "service": {
     "name": "consul",
     "tags": ["{{ node_name }}"]
