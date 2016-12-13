@@ -74,8 +74,8 @@
     },
     {
       "type": "powershell",
-      "inline": [
-        "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 –Schedule"
+      "scripts": [
+        "{{user `scripts_dir`}}/install_acrylic.ps1"
       ]
     }
   ]

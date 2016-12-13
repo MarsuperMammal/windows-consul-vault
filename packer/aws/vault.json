@@ -15,7 +15,7 @@
     "config_dir":        "packer/config",
     "consul_config_dir": "C:\\etc\\consul.d",
     "vault_config_dir":  "C:\\etc\\vault.d",
-    "vault_data_dir":    "C:\\ops\\scripts"
+    "vault_data_dir":    "C:\\opt\\vault\\scripts"
   },
   "push": {
     "name": "{{user `atlas_username`}}/{{user `name`}}",
@@ -95,16 +95,12 @@
         "{{user `scripts_dir`}}/install_consul.ps1",
         "{{user `scripts_dir`}}/install_vault.ps1"
       ]
-    }
-  ],
-  "post-processors": [
+    },
     {
-      "type": "atlas",
-      "artifact": "{{user `atlas_username`}}/{{user `name`}}",
-      "artifact_type": "amazon.ami",
-      "metadata": {
-        "created_at": "{{timestamp}}"
-      }
+      "type": "powershell",
+      "scripts": [
+        "{{user `scripts_dir`}}/install_acrylic.ps1"
+      ]
     }
   ]
 }
