@@ -31,8 +31,7 @@ $acrylicDestination.CopyHere($acrylicZip.Items(), $copyFlags)
 $dns = (Get-DnsClientServerAddress -InterfaceAlias Ethernet).ServerAddresses
 
 Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses '127.0.0.1'
-Set-DnsClientServerAddress -InterfaceIndex 14 -ServerAddresses '$dns'
-$acrylicConfig = "C:\Program Files(x86)\Acrylic DNS Proxy\AcrylicConfiguration.ini"
+$acrylicConfig = "C:\Program Files (x86)\Acrylic DNS Proxy\AcrylicConfiguration.ini"
 $ini = @"
 [GlobalSection]
 PrimaryServerAddress=127.0.0.1
@@ -60,8 +59,7 @@ $ini | out-file "$acrylicConfig"
 
 (Get-Content "$acrylicConfig" | ForEach-Object { $_ -replace "{{ dns_server }}", "$dns" } ) | Set-Content "$acrylicConfig"
 
-Invoke-Command -FilePath "$acrylicDestination\RestartAcrylicServiceSilently.bat"
-
+Start-Process "C:\Program Files (x86)\Acrylic DNS Proxy\RestartAcrylicServiceSilently.bat"
 # Clean up
 write-output "Cleanup"
 Remove-Item -Force -Path $acrylicFilePath
