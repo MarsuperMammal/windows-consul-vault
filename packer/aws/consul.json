@@ -52,7 +52,7 @@
     {
       "type": "powershell",
       "scripts": [
-        "{{user `scripts_dir`}}/set_ec2_launch.ps1"
+        "{{user `scripts_dir`}}/set_ec2_config.ps1"
       ]
     },
     {
@@ -65,6 +65,11 @@
       "type": "file",
       "source": "{{user `config_dir`}}/consul/consul_server.json",
       "destination": "{{user `consul_config_dir`}}\\config.json"
+    },
+    {
+      "type": "file",
+      "source": "{{user `config_dir`}}/consul/consul_server_aws_join.json",
+      "destination": "{{user `consul_config_dir`}}\\join.json"
     },
     {
       "type": "powershell",

@@ -55,6 +55,7 @@ $uiDestination.CopyHere($uiZip.Items(), $copyFlags)
 write-output "Moving nssm"
 Move-Item -Path "C:\opt\nssm\nssm-2.24\win32\nssm.exe" "C:\opt" -Force
 write-output "Moving Consul Web UI"
+New-Item -Path "C:\opt\consul\ui" -ItemType Directory -Force
 Move-Item -Path "C:\opt\consul\static\" "C:\opt\consul\ui\static\" -Force
 Move-Item -Path "C:\opt\consul\index.html" "C:\opt\consul\ui\index.html" -Force
 

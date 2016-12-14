@@ -1,9 +1,6 @@
 {
   "log_level": "INFO",
   "server": true,
-  "atlas_join": true,
-  "atlas_infrastructure": "{{ atlas_username }}/{{ atlas_environment }}",
-  "atlas_token": "{{ atlas_token }}",
   "bootstrap_expect": {{ consul_server_count }},
   "datacenter": "{{ datacenter }}",
   "data_dir": "C:\\opt\\consul\\data",

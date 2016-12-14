@@ -1,0 +1,6 @@
+{
+  "retry_join_ec2": {
+    "tag_key": "{{ consul_tag_key }}",
+    "tag_value": "{{ consul_tag_value }}"
+  }
+}

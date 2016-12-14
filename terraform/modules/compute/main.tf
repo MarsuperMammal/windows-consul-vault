@@ -41,4 +41,9 @@ resource "aws_autoscaling_group" "asg" {
     value = "${var.app_name}"
     propagate_at_launch = true
   }
+  tag {
+    key = "ConsulCluster"
+    value = "${var.datacenter}"
+    propagate_at_launch = true
+  }
 }

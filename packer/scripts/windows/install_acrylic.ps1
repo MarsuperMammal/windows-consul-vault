@@ -28,9 +28,10 @@ $copyFlags += 0x10 # Overwrite existing files
 write-output "Copying acrylic"
 $acrylicDestination.CopyHere($acrylicZip.Items(), $copyFlags)
 
-$dns = (Get-DnsClientServerAddress -InterfaceAlias Ethernet).ServerAddresses
+$defaultInterface = (Get-DnsClientServerAddress).InterfaceAlias[0]
+$dns = (Get-DnsClientServerAddress -InterfaceAlias $defaultInterface).ServerAddresses
 
-Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses '127.0.0.1'
+Set-DnsClientServerAddress -InterfaceAlias $defaultInterface -ServerAddresses '127.0.0.1'
 $acrylicConfig = "C:\Program Files (x86)\Acrylic DNS Proxy\AcrylicConfiguration.ini"
 $ini = @"
 [GlobalSection]

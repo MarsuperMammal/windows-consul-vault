@@ -1,6 +1,4 @@
 variable "admin_username" {}
-variable "atlas_username" {}
-variable "atlas_token" {}
 variable "consul_server_count" {}
 variable "datacenter" {}
 variable "node_name" {}
@@ -28,8 +26,6 @@ data "template_file" "custom_data" {
   template = "${file("templates/consul.tpl")}"
 
   vars {
-    atlas_username = "${var.atlas_username}"
-    atlas_token = "${var.atlas_token}"
     consul_server_count = "${var.consul_server_count}"
     datacenter = "${var.env}${var.datacenter}"
     node_name = "${var.node_name}"

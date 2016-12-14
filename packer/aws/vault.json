@@ -81,6 +81,16 @@
     },
     {
       "type": "file",
+      "source": "{{user `config_dir`}}/consul/vault.json",
+      "destination": "{{user `consul_config_dir`}}\\vault.json"
+    },
+    {
+      "type": "file",
+      "source": "{{user `config_dir`}}/consul/consul_server_aws_join.json",
+      "destination": "{{user `consul_config_dir`}}\\join.json"
+    },
+    {
+      "type": "file",
       "source": "{{user `config_dir`}}/vault/vault.hcl",
       "destination": "{{user `vault_config_dir`}}\\vault.hcl"
     },
