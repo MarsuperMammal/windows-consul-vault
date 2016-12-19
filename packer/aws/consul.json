@@ -68,6 +68,11 @@
     },
     {
       "type": "file",
+      "source": "{{user `scripts_dir`}}/install_acrylic.ps1",
+      "destination": "C:\\opt\\install_acrylic.ps1"
+    },
+    {
+      "type": "file",
       "source": "{{user `config_dir`}}/consul/consul_server_aws_join.json",
       "destination": "{{user `consul_config_dir`}}\\join.json"
     },
@@ -75,12 +80,6 @@
       "type": "powershell",
       "scripts": [
         "{{user `scripts_dir`}}/install_consul.ps1"
-      ]
-    },
-    {
-      "type": "powershell",
-      "scripts": [
-        "{{user `scripts_dir`}}/install_acrylic.ps1"
       ]
     }
   ]

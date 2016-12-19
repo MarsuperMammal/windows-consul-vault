@@ -1,0 +1,4 @@
+setup/vault.*
+terraform/implementation/aws/terraform.tfstate
+terraform/implementation/aws/terraform.tfstate.*
+terraform/implementation/aws/.terraform

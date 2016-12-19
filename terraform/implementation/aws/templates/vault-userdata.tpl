@@ -1,3 +1,4 @@
+<powershell>
 write-output "Setting up..."
 
 SSLDIR=C:\opt\vault\data\
@@ -8,8 +9,8 @@ write-output "Configuring Consul.."
 (Get-Content C:\etc\consul.d\config.json | ForEach-Object { $_ -replace "{{ datacenter }}", \"${datacenter}\" } ) | Set-Content C:\etc\consul.d\config.json
 (Get-Content C:\etc\consul.d\config.json | ForEach-Object { $_ -replace "{{ node_name }}", \"$${node_name}\" } ) | Set-Content C:\etc\consul.d\config.json
 (Get-Content C:\etc\consul.d\vault.json | ForEach-Object { $_ -replace "{{ node_name }}", \"$${node_name}\" } ) | Set-Content C:\etc\config.d\vault.json
-(Get-Content C:\etc\consul.d\join.json | ForEach-Object { $_ -replace "{{ consul_tag_key }}", \"${consul_join_tag_key}\" } ) | Set-Content C:\etc\consul.d\join.json
-(Get-Content C:\etc\consul.d\join.json | ForEach-Object { $_ -replace "{{ consul_tag_value }}", \"${consul_join_tag_value}\" } ) | Set-Content C:\etc\consul.d\join.json
+(Get-Content C:\etc\consul.d\join.json | ForEach-Object { $_ -replace "{{ consul_tag_key }}", \"${consul_server_join_tag_key}\" } ) | Set-Content C:\etc\consul.d\join.json
+(Get-Content C:\etc\consul.d\join.json | ForEach-Object { $_ -replace "{{ consul_tag_value }}", \"${consul_server_join_tag_value}\" } ) | Set-Content C:\etc\consul.d\join.json
 
 write-output "Staging SSL certs"
 "${ssl_cert}" | out-file C:\opt\vault\data\vault.crt
@@ -18,8 +19,16 @@ write-output "Staging SSL certs"
 write-output "Updating cert..."
 Import-Certificate -FilePath C:\opt\vault\data\vault.crt -CertStoreLocation Cert:\LocalMachine\Root
 
+invoke-expression -Command C:\opt\install_acrylic.ps1
+
+$defaultInterface = (Get-DnsClientServerAddress).InterfaceAlias[0]
+$dns = (Get-DnsClientServerAddress -InterfaceAlias $defaultInterface).ServerAddresses
+Set-DnsClientServerAddress -InterfaceAlias $defaultInterface -ServerAddresses '127.0.0.1'
+$acrylicConfig = "C:\Program Files (x86)\Acrylic DNS Proxy\AcrylicConfiguration.ini"
+(Get-Content "$acrylicConfig" | ForEach-Object { $_ -replace "{{ dns_server }}", "$dns" } ) | Set-Content "$acrylicConfig"
+Start-Process "C:\Program Files (x86)\Acrylic DNS Proxy\RestartAcrylicServiceSilently.bat"
+
 write-output "Configuring Vault.."
-(Get-Content C:\etc\vault.d\vault.hcl | ForEach-Object { $_ -replace "{{ consul_server_count }}", \"${consul_server_count}\" } ) | Set-Content C:\etc\vault.d\vault.hcl
 (Get-Content C:\etc\vault.d\vault.hcl | ForEach-Object { $_ -replace "{{ node_name }}", \"$${node_name}\" } ) | Set-Content C:\etc\vault.d\vault.hcl
 (Get-Content C:\etc\vault.d\vault.hcl | ForEach-Object { $_ -replace "{{ tls_cert_file }}", "C:\\opt\\vault\\data\\vault.crt" } ) | Set-Content C:\etc\vault.d\vault.hcl
 (Get-Content C:\etc\vault.d\vault.hcl | ForEach-Object { $_ -replace "{{ tls_key_file }}", "C:\\opt\\vault\\data\\vault.key" } ) | Set-Content C:\etc\vault.d\vault.hcl
@@ -28,3 +37,4 @@ C:\opt\nssm.exe restart consul
 C:\opt\nssm.exe restart vault
 
 C:\opt\vault\scripts\setup_vault.ps1
+</powershell>

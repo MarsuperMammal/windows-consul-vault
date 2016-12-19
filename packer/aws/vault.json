@@ -96,6 +96,11 @@
     },
     {
       "type": "file",
+      "source": "{{user `scripts_dir`}}/install_acrylic.ps1",
+      "destination": "C:\\opt\\install_acrylic.ps1"
+    },
+    {
+      "type": "file",
       "source": "{{user `config_dir`}}/vault/.",
       "destination": "{{user `vault_data_dir`}}"
     },
@@ -104,12 +109,6 @@
       "scripts": [
         "{{user `scripts_dir`}}/install_consul.ps1",
         "{{user `scripts_dir`}}/install_vault.ps1"
-      ]
-    },
-    {
-      "type": "powershell",
-      "scripts": [
-        "{{user `scripts_dir`}}/install_acrylic.ps1"
       ]
     }
   ]

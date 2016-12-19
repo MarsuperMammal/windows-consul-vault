@@ -1,5 +1,8 @@
-variable "region" {}
 variable "priv_subnets" { type = "list" }
+variable "consul_server_join_tag_value" {}
+variable "consul_server_join_tag_key" {}
+variable "iam_instance_profile" {}
+variable "datacenter" {}
 variable "asg_max" {}
 variable "asg_min" {}
 variable "asg_desired" {}
@@ -42,8 +45,8 @@ resource "aws_autoscaling_group" "asg" {
     propagate_at_launch = true
   }
   tag {
-    key = "ConsulCluster"
-    value = "${var.datacenter}"
+    key = "${var.consul_server_join_tag_key}"
+    value = "${var.consul_server_join_tag_value}"
     propagate_at_launch = true
   }
 }
