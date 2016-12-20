@@ -8,6 +8,7 @@ variable "consul_instance_type" {}
 variable "consul_root_volume_size" {}
 variable "consul_server_join_tag_key" { default = "ConsulCluster" }
 variable "datacenter" {}
+variable "dns_server" {}
 variable "key_name" {}
 variable "network_remote_state" {}
 variable "region" {}
@@ -19,8 +20,6 @@ variable "vault_app_name" { default = "vault" }
 variable "vault_ami_id" {}
 variable "vault_instance_type" {}
 variable "vault_root_volume_size" {}
-variable "ssl_cert" {}
-variable "ssl_key" {}
 
 data "terraform_remote_state" "acct" {
   backend = "s3"
@@ -45,9 +44,9 @@ data "template_file" "consul-userdata" {
     datacenter = "${var.datacenter}"
     consul_server_join_tag_key = "${var.consul_server_join_tag_key}"
     consul_server_join_tag_value = "${var.region}-${var.datacenter}"
-    ssl_cert = "${var.ssl_cert}"
-    ssl_key = "${var.ssl_key}"
+    ssl_cert = "${file("../../../setup/vault.crt")}"
     consul_server_count = "${var.consul_asg_desired}"
+    dns_server = "${var.dns_server}"
   }
 }
 
@@ -58,8 +57,9 @@ data "template_file" "vault-userdata" {
     datacenter = "${var.datacenter}"
     consul_server_join_tag_key = "${var.consul_server_join_tag_key}"
     consul_server_join_tag_value = "${var.region}-${var.datacenter}"
-    ssl_cert = "${var.ssl_cert}"
-    ssl_key = "${var.ssl_key}"
+    ssl_cert = "${file("../../../setup/vault.crt")}"
+    ssl_key = "${file("../../../setup/vault.key")}"
+    dns_server = "${var.dns_server}"
   }
 }
 
@@ -79,7 +79,7 @@ module "consul" {
   datacenter = "${var.datacenter}"
   userdata = "${data.template_file.consul-userdata.rendered}"
   root_volume_size = "${var.consul_root_volume_size}"
-  iam_instance_profile = "${data.terraform_remote_state.acct.describe_tags_self.id}"
+  iam_instance_profile = "${data.terraform_remote_state.acct.describe_tags_self}"
 }
 
 module "vault" {
@@ -98,7 +98,7 @@ module "vault" {
   datacenter = "${var.datacenter}"
   userdata = "${data.template_file.vault-userdata.rendered}"
   root_volume_size = "${var.vault_root_volume_size}"
-  iam_instance_profile = "${data.terraform_remote_state.acct.describe_tags_self.id}"
+  iam_instance_profile = "${data.terraform_remote_state.acct.describe_tags_self}"
 }
 
 resource "aws_security_group" "baseline" {
